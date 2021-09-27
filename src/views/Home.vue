@@ -41,6 +41,7 @@ import { defineComponent } from 'vue';
 import { IonIcon, IonItem, IonItemOption, IonItemOptions, IonItemSliding, IonLabel, modalController } from '@ionic/vue';
 import { archive, ellipsisHorizontal, ellipsisVertical, heart, star, trash } from 'ionicons/icons';
 import CreateItem from '../components/CreateItem.vue'
+import data from './items.js'
 
 export default defineComponent({
 	name: 'Home',
@@ -70,11 +71,7 @@ export default defineComponent({
 	},
 	data: function() {
 		return {
-			items: [
-				'Do homework',
-				'Buy milk',
-				'Send email'
-			]
+			items: data
 		}
 	},
 	methods: {
@@ -91,6 +88,10 @@ export default defineComponent({
 		},
 		deleteItem(item) {
 			console.log(item)
+			const index = this.items.indexOf(item);
+			if (index > -1) {
+				this.items.splice(index, 1);
+			}
 		}
 	},
 });

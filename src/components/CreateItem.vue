@@ -7,7 +7,7 @@
     <ion-content class="ion-padding">
         <ion-item>
             <ion-label position="floating">Please type here...</ion-label>
-            <ion-input></ion-input>
+            <ion-input v-model="item"></ion-input>
         </ion-item>
         <div style="text-align: center;">
             <ion-button expand="block" color="primary" @click="save()">Save</ion-button>
@@ -20,18 +20,23 @@
 import { IonContent, IonHeader, IonTitle, IonToolbar, modalController } from '@ionic/vue';
 import { IonLabel, IonInput, IonItem, IonButton } from '@ionic/vue';
 import { defineComponent } from 'vue';
+import data from '../views/items.js'
 
 export default defineComponent({
     name: 'Modal',
     data() {
         return {
-        content: 'Content',
+            item: '',
+            items: data
         }
     },
     components: { IonContent, IonHeader, IonTitle, IonToolbar,IonLabel, IonInput, IonItem, IonButton },
     methods: {
         save() {
-
+            if (this.item != '') {
+                this.items.push(this.item)
+            }
+            modalController.dismiss();
         },
         close() {
             modalController.dismiss();
