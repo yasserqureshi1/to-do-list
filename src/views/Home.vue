@@ -1,51 +1,107 @@
 <template>
-  <ion-page>
-    <ion-header :translucent="true">
-      <ion-toolbar>
-        <ion-title>Blank</ion-title>
-      </ion-toolbar>
-    </ion-header>
-    
-    <ion-content :fullscreen="true">
-      <ion-header collapse="condense">
-        <ion-toolbar>
-          <ion-title size="large">Blank</ion-title>
-        </ion-toolbar>
-      </ion-header>
-    
-      <div id="container">
-        <strong>Ready to create an app?</strong>
-        <p>Start with Ionic <a target="_blank" rel="noopener noreferrer" href="https://ionicframework.com/docs/components">UI Components</a></p>
-      </div>
-    </ion-content>
-  </ion-page>
+	<ion-page>
+		<ion-header :translucent="true">
+			<ion-toolbar>
+				<ion-title>To-Do List</ion-title>
+			</ion-toolbar>
+		</ion-header>
+		
+		<ion-content :fullscreen="true">
+		<ion-header collapse="condense">
+			<ion-toolbar>
+				<ion-title size="large">To-Do List</ion-title>
+			</ion-toolbar>
+		</ion-header>
+		
+		<div id="container">
+			<div v-for="item in items" :key="item">
+				<ion-item-sliding>
+					<ion-item>
+						<ion-label>
+							{{ item }}
+						</ion-label>
+					</ion-item>
+					<ion-item-options>
+						<ion-item-option color="danger" @click="deleteItem(item)">
+							<ion-icon :icon="archive"></ion-icon>
+							Delete
+						</ion-item-option>
+					</ion-item-options>
+				</ion-item-sliding>
+			</div>
+		</div>
+		</ion-content>
+		<ion-button size="large" style="margin: 20px" @click="openModal">Add item</ion-button>
+	</ion-page>
 </template>
 
-<script lang="ts">
-import { IonContent, IonHeader, IonPage, IonTitle, IonToolbar } from '@ionic/vue';
+<script>
+import { IonContent, IonHeader, IonPage, IonTitle, IonToolbar, IonButton } from '@ionic/vue';
 import { defineComponent } from 'vue';
+import { IonIcon, IonItem, IonItemOption, IonItemOptions, IonItemSliding, IonLabel, modalController } from '@ionic/vue';
+import { archive, ellipsisHorizontal, ellipsisVertical, heart, star, trash } from 'ionicons/icons';
+import CreateItem from '../components/CreateItem.vue'
 
 export default defineComponent({
-  name: 'Home',
-  components: {
-    IonContent,
-    IonHeader,
-    IonPage,
-    IonTitle,
-    IonToolbar
-  }
+	name: 'Home',
+	components: {
+		IonContent,
+		IonHeader,
+		IonPage,
+		IonTitle,
+		IonToolbar,
+		IonButton,
+		IonIcon, 
+		IonItem, 
+		IonItemOption, 
+		IonItemOptions, 
+		IonItemSliding, 
+		IonLabel, 
+	},
+	setup() {
+		return {
+			archive, 
+			ellipsisHorizontal, 
+			ellipsisVertical,
+			heart, 
+			star, 
+			trash
+		}
+	},
+	data: function() {
+		return {
+			items: [
+				'Do homework',
+				'Buy milk',
+				'Send email'
+			]
+		}
+	},
+	methods: {
+		async openModal() {
+			const modal = await modalController
+				.create({
+					component: CreateItem,
+					cssClass: 'my-custom-class',
+					componentProps: {
+						title: 'New Title'
+					},
+				})
+			return modal.present();
+		},
+		deleteItem(item) {
+			console.log(item)
+		}
+	},
 });
 </script>
 
 <style scoped>
 #container {
-  text-align: center;
-  
   position: absolute;
   left: 0;
   right: 0;
-  top: 50%;
-  transform: translateY(-50%);
+
 }
 
 #container strong {
